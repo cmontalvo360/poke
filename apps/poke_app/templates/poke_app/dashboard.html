@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Pokes</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+</head>
+<body>
+	<a href="/logout">Logout</a>
+	<h2>Welcome, {{ request.session.nam }}!</h2>
+	<h4>{{ my_pokes.count }} people poked you!</h4>
+
+	{%for x in my_pokes%}
+		<p>{{x.poke_sender.name}} poked you {{x.count}} times.</p>
+
+
+	{%endfor%}
+	<h3>People you may want to poke:</h3>
+	<table>
+		<thead>
+		<tr>
+			<th>Name</th>
+			<th>Alias</th>
+			<th>Email Address</th>
+			<th>Poke History</th>
+			<th>Action</th>
+		</tr>
+		</thead>
+		{%for x in others_pokes%}
+		<tr>
+			<td>{{x.name}}</td>
+			<td>{{x.alias}}</td>
+			<td>{{x.email}}</td>
+			<td>{{x.num_pokes}}</td>
+			<td>
+				<form action="/poke" method="POST">
+					{% csrf_token%}
+					<input type="hidden" name="poke_receiver" value="{{x.id}}">
+					<input type="submit" value="Poke!">
+				</form>
+			</td>
+		<tr>
+		{%endfor%}
+	</table>
+</body>
+</html>
